@@ -1,0 +1,29 @@
+{
+  "name": "lolprofilebackground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "build": {
+    "appId": "com.Tortudereli.lolprofilebackground",
+    "productName": "LoL Profil Arka Plan Değiştirici",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "icon": "build/icon.ico"
+    }
+  },
+  "author": "Tortudereli",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^30.0.6",
+    "electron-builder": "^24.13.3"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "lcu-connector": "^2.1.4"
+  }
+}
