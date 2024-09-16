@@ -4,6 +4,13 @@ var skinsData = null,
 const champList = document.getElementById("champs");
 const skinList = document.getElementById("skins");
 const submitButton = document.getElementById("submit");
+const version = document.getElementById("version");
+
+version.innerText = "v" + ipcRenderer.sendSync("getAppVersion");
+
+ipcRenderer.on("message", (event, message) => {
+  console.log(message);
+});
 
 function checkData() {
   skinsData = ipcRenderer.sendSync("getClientApi", "/lol-game-data/assets/v1/skins.json"); // * all skins data

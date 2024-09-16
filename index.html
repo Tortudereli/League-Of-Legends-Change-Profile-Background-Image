@@ -3,64 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self';" />
     <title>League Of Legends Profil Arkaplan Resim Değiştirici - Tortudereli</title>
-    <style>
-      body {
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-attachment: fixed;
-      }
-      #container {
-        background-color: black;
-        width: 50%;
-        height: 50vh;
-        margin: 15vh auto auto auto;
-        border-radius: 10%;
-        border: 2px solid white;
-        opacity: 80%;
-        position: relative;
-      }
-      #champs,
-      #skins {
-        position: absolute;
-        left: 0;
-        right: 0;
-        width: 70%;
-        top: 5vh;
-        height: 5vh;
-        margin: auto;
-        text-align: center;
-        font-size: 1.6vw;
-      }
-      #skins {
-        top: 20vh;
-      }
-      button {
-        position: absolute;
-        bottom: 5vh;
-        left: 0;
-        right: 0;
-        margin: auto;
-        width: 15vw;
-        height: 5vh;
-        font-size: 1.4vw;
-        border: 2px solid white;
-        background-color: gold;
-        color: black;
-        font-weight: bold;
-        transition: background-color 0.3s;
-      }
-      button:hover {
-        cursor: pointer;
-        background-color: gold;
-      }
-      button:active {
-        background-color: #89ff34;
-      }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
   </head>
   <body>
-    <div id="container">
+    <h1 id="version"></h1>
+    <div class="container">
       <select id="champs">
         <option value="-1">Şampiyon Seç</option>
       </select>
@@ -68,5 +20,5 @@
       <button id="submit" type="submit">UYGULA</button>
     </div>
   </body>
-  <script src="./main.js"></script>
+  <script src="./assets/js/main.js"></script>
 </html>

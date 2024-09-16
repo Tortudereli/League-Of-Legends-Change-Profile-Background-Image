@@ -1,0 +1,136 @@
+/*
+  1. Use a more-intuitive box-sizing model.
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/*
+  2. Remove default margin
+*/
+* {
+  margin: 0;
+  font-family: "Roboto Slab", serif;
+  font-weight: 600;
+  font-style: normal;
+  user-select: none;
+}
+
+/*
+  Typographic tweaks!
+  3. Add accessible line-height
+  4. Improve text rendering
+*/
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  margin: 0;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+/*
+  5. Improve media defaults
+*/
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/*
+  6. Remove built-in form typography styles
+*/
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/*
+  7. Avoid text overflows
+*/
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/*
+  8. Create a root stacking context
+*/
+#root,
+#__next {
+  isolation: isolate;
+}
+
+h1 {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  color: white;
+}
+
+.container {
+  background-color: rgba(0, 43, 93, 0.8);
+  min-width: 50%;
+  padding: 24px 24px;
+  border-radius: 30px;
+  border: 2px solid white;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+}
+
+#champs,
+#skins {
+  display: block;
+  min-width: 300px;
+  padding: 8px 12px;
+  font-size: 1.6vw;
+  border-radius: 10px;
+  outline: none;
+  border: 2px solid white;
+  background-color: #34aaff;
+}
+
+#skins {
+  top: 20vh;
+}
+
+#submit {
+  padding: 8px 12px;
+  font-size: 1.4vw;
+  border: 2px solid white;
+  background-color: rgba(255, 217, 1, 0.8);
+  color: black;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  border-radius: 8px;
+}
+
+#submit:hover {
+  cursor: pointer;
+  background-color: black;
+  color: gold;
+  border: 2px solid gold;
+}
+
+#submit:active {
+  background-color: #34aaff;
+}
