@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+	"dist": "electron-builder"
   },
   "build": {
     "appId": "com.Tortudereli.lolprofilebackground",
