@@ -1,23 +1,52 @@
 const { app, BrowserWindow, ipcMain, dialog, Menu } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const path = require("node:path");
-const LCUConnector = require("lcu-connector");
 const axios = require("axios");
 const https = require("https");
+const cp = require("child_process");
+
+let lcuData = {
+  username: "riot",
+  password: null,
+  port: null,
+};
+
+function getLcuData(callback) {
+  const command = `powershell -Command "Get-CimInstance Win32_Process -Filter \\"Name = 'LeagueClientUx.exe'\\\" | Select-Object CommandLine | Format-List"`;
+
+  cp.exec(command, (err, stdout, stderr) => {
+    if (err || !stdout || stderr) {
+      console.log("Hata: ", err);
+      callback("error");
+      return;
+    }
+
+    const output = stdout
+      .replace(/--\s*(\S+)/g, "--$1")
+      .replace(/\s+/g, "")
+      .replace(/\r?\n|\r/g, "")
+      .trim();
+
+    lcuData.password = output.match(/--remoting-auth-token=([A-Za-z0-9\-_]+)/)[1] != "null" ? output.match(/--remoting-auth-token=([A-Za-z0-9\-_]+)/)[1] : null;
+    lcuData.port = output.match(/--app-port=([0-9]+)/)[1] != "null" ? output.match(/--app-port=([0-9]+)/)[1] : null;
+
+    callback(lcuData);
+  });
+}
+
+let appRun = false;
 
 autoUpdater.autoInstallOnAppQuit = true;
 
 app.setName("League Of Legends Change Background Image");
 
-const connector = new LCUConnector();
-var clientData = null;
 var clientApiUrl = null;
 var clientApiAuth = null;
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
     minWidth: 800,
     minHeight: 600,
     icon: path.join(__dirname, "assets/img/icon.ico"),
@@ -53,28 +82,42 @@ const createWindow = () => {
     });
   });
 
-  connector.on("connect", (data) => {
-    clientData = data;
-    clientApiAuth = Buffer.from(`${data["username"]}:${data["password"]}`).toString("base64");
-    clientApiUrl = data["protocol"] + "://" + data["address"] + ":" + data["port"];
-    mainWindow.loadFile(path.join(__dirname, "index.html"));
-  });
+  mainWindow.loadFile(path.join(__dirname, "assets/html/waiting.html"));
 
-  connector.on("disconnect", () => {
-    clientData = null;
+  setInterval(() => {
+    getLcuData((x) => {
+      if (x != "error") {
+        console.log(x);
+        const { username, password, port } = x;
+        if (port != null && password != null && !appRun) {
+          startApp(username, password, port);
+          appRun = true;
+        } else if (port == null || (password == null && appRun)) {
+          stopApp();
+          appRun = false;
+        }
+      } else {
+        stopApp();
+        appRun = false;
+      }
+    });
+  }, 10000);
+
+  function startApp(username, password, port) {
+    clientApiAuth = Buffer.from(`${username}:${password}`).toString("base64");
+    clientApiUrl = "https://127.0.0.1:" + port;
+    mainWindow.loadFile(path.join(__dirname, "index.html"));
+  }
+
+  function stopApp() {
     clientApiAuth = null;
     clientApiUrl = null;
     mainWindow.loadFile(path.join(__dirname, "assets/html/waiting.html"));
-  });
+  }
 
-  connector.start();
-
-  mainWindow.loadFile(path.join(__dirname, "assets/html/waiting.html"));
   // mainWindow.webContents.openDevTools();
   Menu.setApplicationMenu(null);
 };
-
-ipcMain.on("checkUpdate", (event, arg) => {});
 
 ipcMain.on("getAppVersion", (event, arg) => {
   event.returnValue = app.getVersion();
@@ -138,7 +181,7 @@ ipcMain.on("showMessageBox", (event, options) => {
       event.sender.send("showMessageBoxResponse", result.response);
     })
     .catch((err) => {
-      console.log(err);
+      console.err(err);
     });
 });
 
@@ -155,4 +198,9 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
   }
+});
+
+process.on('uncaughtException', (error) => {
+  console.error(error);
+  process.exit(1);
 });

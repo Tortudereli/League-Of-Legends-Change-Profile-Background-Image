@@ -1,6 +1,6 @@
 {
   "name": "league-of-legends-change-background",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
       "output": "dist"
     },
     "files": [
-      "dist/**/*",
+      "buid/*",
       "assets/**/*",
       "node_modules/**/*",
       "index.js",
@@ -26,12 +26,6 @@
       "signingHashAlgorithms": [
         "sha256"
       ]
-    },
-    "mac": {
-      "target": "zip"
-    },
-    "linux": {
-      "target": "AppImage"
     }
   },
   "repository": "https://github.com/Tortudereli/League-Of-Legends-Change-Profile-Background-Image",
@@ -51,7 +45,6 @@
   },
   "dependencies": {
     "axios": "^1.7.7",
-    "electron-updater": "^6.3.4",
-    "lcu-connector": "^2.1.4"
+    "electron-updater": "^6.3.4"
   }
 }

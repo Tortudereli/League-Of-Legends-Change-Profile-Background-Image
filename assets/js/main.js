@@ -1,10 +1,15 @@
-const { ipcRenderer } = require("electron");
+const { ipcRenderer, shell } = require("electron");
 var skinsData = null,
   champData = null;
 const champList = document.getElementById("champs");
 const skinList = document.getElementById("skins");
 const submitButton = document.getElementById("submit");
 const version = document.getElementById("version");
+const info = document.querySelector(".info");
+
+info.querySelector("img").addEventListener("click", () => {
+  shell.openExternal("https://github.com/Tortudereli/League-Of-Legends-Change-Profile-Background-Image");
+});
 
 version.innerText = "v" + ipcRenderer.sendSync("getAppVersion");
 

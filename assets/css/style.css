@@ -79,11 +79,23 @@ h6 {
   isolation: isolate;
 }
 
-h1 {
+.info{
   position: absolute;
   top: 24px;
   right: 24px;
-  color: white;
+  display: flex;
+  gap: 32px;
+
+  h1 {
+    color: white;
+  }
+  
+  img{
+    width: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
 }
 
 .container {
