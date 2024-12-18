@@ -1,6 +1,6 @@
 {
   "name": "league-of-legends-change-background",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "axios": "^1.7.7",
+    "electron-log": "^5.2.4",
     "electron-updater": "^6.3.4"
   }
 }

@@ -5,6 +5,10 @@ const axios = require("axios");
 const https = require("https");
 const cp = require("child_process");
 
+const log = require("electron-log");
+
+log.transports.file.resolvePathFn = () => path.join(process.env.APPDATA, app.getName(), "logs/log.log");
+
 let lcuData = {
   username: "riot",
   password: null,
@@ -36,8 +40,6 @@ function getLcuData(callback) {
 
 let appRun = false;
 
-autoUpdater.autoInstallOnAppQuit = true;
-
 app.setName("League Of Legends Change Background Image");
 
 var clientApiUrl = null;
@@ -54,32 +56,6 @@ const createWindow = () => {
       nodeIntegration: true,
       contextIsolation: false,
     },
-  });
-
-  autoUpdater.checkForUpdates();
-
-  autoUpdater.on("update-not-available", () => {
-    mainWindow.webContents.send("message", "Uygulama güncel.");
-  });
-
-  autoUpdater.on("update-available", () => {
-    dialog.showMessageBox({
-      icon: path.join(__dirname, "assets/img/icon.ico"),
-      message: "Update Available. Downloading...",
-      title: "Updater",
-      buttons: ["Ok"],
-      type: "info",
-    });
-  });
-
-  autoUpdater.on("update-downloaded", () => {
-    dialog.showMessageBox({
-      icon: path.join(__dirname, "assets/img/icon.ico"),
-      message: "Update downloaded. It will update when the app is closed.",
-      title: "Updater",
-      buttons: ["Ok"],
-      type: "info",
-    });
   });
 
   mainWindow.loadFile(path.join(__dirname, "assets/html/waiting.html"));
@@ -187,11 +163,8 @@ ipcMain.on("showMessageBox", (event, options) => {
 
 app.whenReady().then(() => {
   createWindow();
-  app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
+  log.info("Uygulama versiyonu " + app.getVersion());
+  autoUpdater.checkForUpdatesAndNotify();
 });
 
 app.on("window-all-closed", () => {
@@ -200,7 +173,39 @@ app.on("window-all-closed", () => {
   }
 });
 
-process.on('uncaughtException', (error) => {
+process.on("uncaughtException", (error) => {
   console.error(error);
   process.exit(1);
 });
+
+autoUpdater.on("checking-for-update", () => {
+  log.info("Güncelleme kontrol ediliyor");
+});
+
+autoUpdater.on("update-not-available", () => {
+  log.info("Uygulama güncel");
+});
+
+autoUpdater.on("update-available", () => {
+  log.info("Güncelleme var");
+  dialog.showMessageBox({
+    icon: path.join(__dirname, "assets/img/icon.ico"),
+    message: "Güncelleme mevcut. İndiriliyor...",
+    title: "Updater",
+    buttons: ["Ok"],
+    type: "info",
+  });
+});
+
+autoUpdater.on("update-downloaded", () => {
+  log.info("Güncelleme indirildi");
+  dialog.showMessageBox({
+    icon: path.join(__dirname, "assets/img/icon.ico"),
+    message: "Güncelleme indirildi. Uygulamayı kapattıktan sonra otomatik olarak güncellenecek.",
+    title: "Updater",
+    buttons: ["Ok"],
+    type: "info",
+  });
+});
+
+autoUpdater.on("download-progress", (p) => log.info(p));
