@@ -6,6 +6,7 @@ const https = require("https");
 const cp = require("child_process");
 
 const log = require("electron-log");
+const { error } = require("node:console");
 
 log.transports.file.resolvePathFn = () => path.join(process.env.APPDATA, app.getName(), "logs/log.log");
 
@@ -209,3 +210,5 @@ autoUpdater.on("update-downloaded", () => {
 });
 
 autoUpdater.on("download-progress", (p) => log.info(p));
+
+autoUpdater.on("error", (error) => log.error(error))

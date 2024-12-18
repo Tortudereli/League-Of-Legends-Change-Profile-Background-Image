@@ -31,6 +31,8 @@
   "repository": "https://github.com/Tortudereli/League-Of-Legends-Change-Profile-Background-Image",
   "publish": {
     "provider": "github",
+    "owner": "Tortudereli",
+    "repo": "League-Of-Legends-Change-Profile-Background-Image",
     "releaseType": "release"
   },
   "author": "Tortudereli",
